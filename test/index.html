@@ -1,0 +1,40 @@
+<!DOCTYPE 5>
+<html>
+  <head>
+    <title>Menu</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="out.css" />
+  </head>
+  <body>
+    <title>Menu</title>
+    <script src="out.js"></script>
+    <script>
+      var menu = require('menu');
+  
+      menu = menu();
+  
+      menu
+      .add('add-item', 'Add <em>item</em>')
+      .add('Edit item', function(){ console.log('edit'); })
+      .add('Remove item', function(){ console.log('remove'); })
+      .add('Remove "Add item"', function(){
+        menu.remove('add-item');
+        menu.remove('Remove "Add item"');
+      });
+
+      menu.on('select', function(item){
+        console.log('selected "%s"', item);
+      });
+
+      menu.on('Add item', function(){
+        console.log('added an item');
+      });
+
+      oncontextmenu = function(e){
+        e.preventDefault();
+        menu.moveTo(e.pageX, e.pageY);
+        menu.show();
+      };
+    </script>
+  </body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "menu-component",
+  "description": "Menu component",
+  "version": "0.0.1",
+  "keywords": ["menu", "component"],
+  "dependencies": {
+    "emitter-component": "*",
+    "jquery-component": "*"
+  },
+  "component": {
+    "styles": ["menu.css"],
+    "scripts": {
+      "menu": "menu.js"
+    }
+  }
+}
