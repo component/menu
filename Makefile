@@ -1,5 +1,5 @@
 
-test/out.js: menu.js menu.css
+test/out.js: index.js menu.css
 	component build package.json test/out
 
 clean:
