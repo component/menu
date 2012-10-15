@@ -246,8 +246,7 @@ Menu.prototype.hide = function(){
  */
 
 function createSlug(str) {
-  if (typeof str === 'number') { str = str.toString(); }
-  return str
+  return String(str)
     .toLowerCase()
     .replace(/ +/g, '-')
     .replace(/[^a-z0-9-]/g, '');
