@@ -98,7 +98,7 @@ Menu.prototype.onkeydown = function(e){
 
 /**
  * Focus on the next menu item in `direction`.
- * 
+ *
  * @param {String} direction "prev" or "next"
  * @api public
  */
@@ -242,6 +242,7 @@ Menu.prototype.hide = function(){
  */
 
 function createSlug(str) {
+  if (typeof str === 'number') { str = str.toString(); }
   return str
     .toLowerCase()
     .replace(/ +/g, '-')
