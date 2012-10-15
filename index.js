@@ -83,6 +83,10 @@ Menu.prototype.unbindKeyboardEvents = function(){
 
 Menu.prototype.onkeydown = function(e){
   switch (e.keyCode) {
+    // esc
+    case 27:
+      this.hide();
+      break;
     // up
     case 38:
       e.preventDefault();
