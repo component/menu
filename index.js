@@ -35,7 +35,7 @@ function Menu() {
   $('html').click(this.hide.bind(this));
   this.on('show', this.bindKeyboardEvents.bind(this));
   this.on('hide', this.unbindKeyboardEvents.bind(this));
-};
+}
 
 /**
  * Inherit from `Emitter.prototype`.
@@ -149,7 +149,7 @@ Menu.prototype.add = function(text, fn){
 
   var self = this
     , el = $('<li><a href="#">' + text + '</a></li>')
-    .addClass(slug)
+    .addClass('menu-item-', slug)
     .appendTo(this.el)
     .click(function(e){
       e.preventDefault();
