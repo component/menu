@@ -149,7 +149,7 @@ Menu.prototype.add = function(text, fn){
 
   var self = this
     , el = o('<li><a href="#">' + text + '</a></li>')
-    .addClass('menu-item-', slug)
+    .addClass('menu-item-' + slug)
     .appendTo(this.el)
     .click(function(e){
       e.preventDefault();
