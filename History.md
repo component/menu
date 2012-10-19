@@ -1,4 +1,10 @@
 
+0.1.1 / 2012-10-19 
+==================
+
+  * add 'item-menu-' prefix to item menu classname [damian]
+  * replace `$` with `o` [damian]
+
 0.1.0 / 2012-10-15 
 ==================
 
