@@ -1,7 +1,7 @@
 {
   "name": "menu",
   "description": "Menu component",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "keywords": ["menu", "ui"],
   "dependencies": {
     "component/emitter": "*",
