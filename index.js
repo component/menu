@@ -4,7 +4,7 @@
  */
 
 var Emitter = require('emitter')
-  , $ = require('jquery');
+  , o = require('jquery');
 
 /**
  * Expose `Menu`.
@@ -30,9 +30,9 @@ function Menu() {
   if (!(this instanceof Menu)) return new Menu;
   Emitter.call(this);
   this.items = {};
-  this.el = $('<ul class=menu>').hide().appendTo('body');
+  this.el = o('<ul class=menu>').hide().appendTo('body');
   this.el.hover(this.deselect.bind(this));
-  $('html').click(this.hide.bind(this));
+  o('html').click(this.hide.bind(this));
   this.on('show', this.bindKeyboardEvents.bind(this));
   this.on('hide', this.unbindKeyboardEvents.bind(this));
 }
@@ -60,7 +60,7 @@ Menu.prototype.deselect = function(){
  */
 
 Menu.prototype.bindKeyboardEvents = function(){
-  $(document).bind('keydown.menu', this.onkeydown.bind(this));
+  o(document).bind('keydown.menu', this.onkeydown.bind(this));
   return this;
 };
 
@@ -71,7 +71,7 @@ Menu.prototype.bindKeyboardEvents = function(){
  */
 
 Menu.prototype.unbindKeyboardEvents = function(){
-  $(document).unbind('keydown.menu');
+  o(document).unbind('keydown.menu');
   return this;
 };
 
@@ -148,7 +148,7 @@ Menu.prototype.add = function(text, fn){
   }
 
   var self = this
-    , el = $('<li><a href="#">' + text + '</a></li>')
+    , el = o('<li><a href="#">' + text + '</a></li>')
     .addClass('menu-item-', slug)
     .appendTo(this.el)
     .click(function(e){
