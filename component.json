@@ -2,11 +2,19 @@
   "name": "menu",
   "description": "Menu component",
   "version": "0.1.1",
-  "keywords": ["menu", "ui"],
+  "keywords": [
+    "menu",
+    "ui"
+  ],
   "dependencies": {
     "component/emitter": "*",
     "component/jquery": "*"
   },
-  "styles": ["menu.css"],
-  "scripts": ["index.js"]
+  "styles": [
+    "menu.css"
+  ],
+  "scripts": [
+    "index.js"
+  ],
+  "license": "MIT"
 }
