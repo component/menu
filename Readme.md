@@ -23,6 +23,7 @@ $ npm install menu-component
   - `show` when shown
   - `hide` when hidden
   - `remove` (item) when an item is removed
+  - `clear` when the menu has been cleared
   - `select` (item) when an item is selected
   - `*` menu item events are emitted when clicked
 
@@ -58,7 +59,7 @@ oncontextmenu = function(e){
 ```
 
 ## API
-  
+
 ### Menu()
 
   Create a new `Menu`:
@@ -121,6 +122,14 @@ menu.remove('Add item');
 ```js
 menu.add('add-item', 'Add item');
 menu.remove('add-item');
+```
+
+### Menu#clear()
+
+  Clears the menu.
+
+```js
+menu.clear();
 ```
 
 ### Menu#has(slug)

@@ -10,13 +10,14 @@
     <script src="../build/build.js"></script>
     <script>
       var menu = require('menu');
-  
+
       menu = menu();
-  
+
       menu
       .add('add-item', 'Add <em>item</em>')
       .add('Edit item', function(){ console.log('edit'); })
       .add('Remove item', function(){ console.log('remove'); })
+      .add('Clear Menu', menu.clear.bind(menu))
       .add('Remove "Add item"', function(){
         menu.remove('add-item');
         menu.remove('Remove "Add item"');
@@ -28,6 +29,11 @@
 
       menu.on('Add item', function(){
         console.log('added an item');
+      });
+
+      menu.on('clear', function() {
+        console.log('clear');
+        menu.add('born-again', '<em>Born Again</em>');
       });
 
       oncontextmenu = function(e){
