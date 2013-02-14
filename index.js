@@ -121,9 +121,7 @@ Menu.prototype.move = function(direction){
   if (next.length()) {
     prev.removeClass('selected');
     next.addClass('selected');
-    var ev = document.createEvent("UIEvents");
-    ev.initUIEvent("focus",true,true);
-    next.find('a').get(0).dispatchEvent(ev);
+    next.find('a').get(0).focus();
   }
 };
 
@@ -155,7 +153,9 @@ Menu.prototype.add = function(text, fn){
 
   var self = this
     , el = dom('<li><a href="#">' + text + '</a></li>')
-    .addClass('menu-item-' + slug)
+             .addClass('menu-item-' + slug)
+
+  el.find('a')
     .on('click', function(e){
       e.preventDefault();
       e.stopPropagation();
