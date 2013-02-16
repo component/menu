@@ -30,9 +30,10 @@ function Menu() {
   if (!(this instanceof Menu)) return new Menu;
   Emitter.call(this);
   this.items = {};
-  this.el = dom('<ul class=menu>').css('display','none');
-  document.body.appendChild(this.el.get(0));
-  this.el.on('hover', this.deselect.bind(this));
+  this.menu = dom('<ul class=menu>').css('display','none');
+  this.el = this.menu.get(0);
+  document.body.appendChild(this.el);
+  this.menu.on('hover', this.deselect.bind(this));
   document.getElementsByTagName('html')[0].onclick = this.hide.bind(this);
   this.on('show', this.bindKeyboardEvents.bind(this));
   this.on('hide', this.unbindKeyboardEvents.bind(this));
@@ -51,7 +52,7 @@ Menu.prototype = new Emitter;
  */
 
 Menu.prototype.deselect = function(){
-  this.el.find('.selected').removeClass('selected');
+  this.menu.find('.selected').removeClass('selected');
 };
 
 /**
@@ -111,11 +112,11 @@ Menu.prototype.onkeydown = function(e){
  */
 
 Menu.prototype.move = function(direction){
-  var prev = this.el.find('.selected');
+  var prev = this.menu.find('.selected');
 
   var next = prev.length()
     ? prev.get(0)[direction + 'ElementSibling']
-    : this.el.find('li:first-child').get(0);
+    : this.menu.find('li:first-child').get(0);
 
   next = next ? dom(next) : dom([]);
   if (next.length()) {
@@ -165,8 +166,8 @@ Menu.prototype.add = function(text, fn){
       fn && fn();
     });
 
-  this.el.get(0).appendChild(el.get(0));
-  this.items[slug] = el;
+  this.el.appendChild(el.get(0));
+  this.items[slug] = el.get(0);
   return this;
 };
 
@@ -182,7 +183,7 @@ Menu.prototype.remove = function(slug){
   var item = this.items[slug] || this.items[createSlug(slug)];
   if (!item) throw new Error('no menu item named "' + slug + '"');
   this.emit('remove', slug);
-  this.el.get(0).removeChild(item.get(0));
+  this.el.removeChild(item);
   delete this.items[slug];
   delete this.items[createSlug(slug)];
   return this;
@@ -210,7 +211,7 @@ Menu.prototype.has = function(slug){
  */
 
 Menu.prototype.moveTo = function(x, y){
-  this.el.css('top', y).css('left',x);
+  this.menu.css('top', y).css('left',x);
   return this;
 };
 
@@ -223,7 +224,7 @@ Menu.prototype.moveTo = function(x, y){
 
 Menu.prototype.show = function(){
   this.emit('show');
-  this.el.css('display','block');
+  this.menu.css('display','block');
   return this;
 };
 
@@ -236,7 +237,7 @@ Menu.prototype.show = function(){
 
 Menu.prototype.hide = function(){
   this.emit('hide');
-  this.el.css('display','none');
+  this.menu.css('display','none');
   return this;
 };
 
