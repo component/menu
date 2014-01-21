@@ -197,7 +197,7 @@ Menu.prototype.remove = function(slug){
  */
 
 Menu.prototype.clear = function(){
-  this.el.empty();
+  this.el.innerHTML = "";
   this.items = {};
   this.emit('clear');
   return this;
