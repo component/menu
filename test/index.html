@@ -10,6 +10,7 @@
     <script src="../build/build.js"></script>
     <script>
       var menu = require('menu');
+      var bind = require('bind');
 
       menu = menu();
 
@@ -17,7 +18,7 @@
       .add('add-item', 'Add <em>item</em>')
       .add('Edit item', function(){ console.log('edit'); })
       .add('Remove item', function(){ console.log('remove'); })
-      .add('Clear Menu', menu.clear.bind(menu))
+      .add('Clear Menu', bind(menu, menu.clear))
       .add('Remove "Add item"', function(){
         menu.remove('add-item');
         menu.remove('Remove "Add item"');

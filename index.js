@@ -3,7 +3,8 @@
  * Module dependencies.
  */
 
-var Emitter = require('emitter')
+var bind    = require('bind')
+  , Emitter = require('emitter')
   , dom     = require('dom')
 
 /**
@@ -33,10 +34,10 @@ function Menu() {
   this.menu = dom('<ul class=menu>').css('display','none');
   this.el = this.menu[0];
   document.body.appendChild(this.el);
-  this.menu.on('hover', this.deselect.bind(this));
-  document.getElementsByTagName('html')[0].onclick = this.hide.bind(this);
-  this.on('show', this.bindKeyboardEvents.bind(this));
-  this.on('hide', this.unbindKeyboardEvents.bind(this));
+  this.menu.on('hover', bind(this, this.deselect));
+  document.getElementsByTagName('html')[0].onclick = bind(this, this.hide);
+  this.on('show', bind(this, this.bindKeyboardEvents));
+  this.on('hide', bind(this, this.unbindKeyboardEvents));
 }
 
 /**
@@ -62,7 +63,7 @@ Menu.prototype.deselect = function(){
  */
 
 Menu.prototype.bindKeyboardEvents = function(){
-  dom(document).on('keydown', this._fnKeyDown = this.onkeydown.bind(this));
+  dom(document).on('keydown', this._fnKeyDown = bind(this, this.onkeydown));
   return this;
 };
 
