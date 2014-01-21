@@ -4,7 +4,7 @@
  */
 
 var Emitter = require('emitter')
-  , o = require('jquery');
+  , dom     = require('dom')
 
 /**
  * Expose `Menu`.
@@ -30,9 +30,11 @@ function Menu() {
   if (!(this instanceof Menu)) return new Menu;
   Emitter.call(this);
   this.items = {};
-  this.el = o('<ul class=menu>').hide().appendTo('body');
-  this.el.hover(this.deselect.bind(this));
-  o('html').click(this.hide.bind(this));
+  this.menu = dom('<ul class=menu>').css('display','none');
+  this.el = this.menu.get(0);
+  document.body.appendChild(this.el);
+  this.menu.on('hover', this.deselect.bind(this));
+  document.getElementsByTagName('html')[0].onclick = this.hide.bind(this);
   this.on('show', this.bindKeyboardEvents.bind(this));
   this.on('hide', this.unbindKeyboardEvents.bind(this));
 }
@@ -50,7 +52,7 @@ Menu.prototype = new Emitter;
  */
 
 Menu.prototype.deselect = function(){
-  this.el.find('.selected').removeClass('selected');
+  this.menu.find('.selected').removeClass('selected');
 };
 
 /**
@@ -60,7 +62,7 @@ Menu.prototype.deselect = function(){
  */
 
 Menu.prototype.bindKeyboardEvents = function(){
-  o(document).bind('keydown.menu', this.onkeydown.bind(this));
+  dom(document).on('keydown', this._fnKeyDown = this.onkeydown.bind(this));
   return this;
 };
 
@@ -71,7 +73,7 @@ Menu.prototype.bindKeyboardEvents = function(){
  */
 
 Menu.prototype.unbindKeyboardEvents = function(){
-  o(document).unbind('keydown.menu');
+  if (this._fnKeyDown) dom(document).off('keydown', this._fnKeyDown);
   return this;
 };
 
@@ -89,12 +91,14 @@ Menu.prototype.onkeydown = function(e){
       break;
     // up
     case 38:
-      e.preventDefault();
-      this.move('prev');
+      e.preventDefault(); 
+      e.stopImmediatePropagation();
+      this.move('previous');
       break;
     // down
     case 40:
       e.preventDefault();
+      e.stopImmediatePropagation();
       this.move('next');
       break;
   }
@@ -103,21 +107,22 @@ Menu.prototype.onkeydown = function(e){
 /**
  * Focus on the next menu item in `direction`.
  *
- * @param {String} direction "prev" or "next"
+ * @param {String} direction "previous" or "next"
  * @api public
  */
 
 Menu.prototype.move = function(direction){
-  var prev = this.el.find('.selected').eq(0);
+  var prev = this.menu.find('.selected');
 
-  var next = prev.length
-    ? prev[direction]()
-    : this.el.find('li:first-child');
+  var next = prev.length()
+    ? prev.get(0)[direction + 'ElementSibling']
+    : this.menu.find('li:first-child').get(0);
 
-  if (next.length) {
+  next = next ? dom(next) : dom([]);
+  if (next.length()) {
     prev.removeClass('selected');
     next.addClass('selected');
-    next.find('a').focus();
+    next.find('a').get(0).focus();
   }
 };
 
@@ -148,10 +153,11 @@ Menu.prototype.add = function(text, fn){
   }
 
   var self = this
-    , el = o('<li><a href="#">' + text + '</a></li>')
-    .addClass('menu-item-' + slug)
-    .appendTo(this.el)
-    .click(function(e){
+    , el = dom('<li><a href="#">' + text + '</a></li>')
+             .addClass('menu-item-' + slug)
+
+  el.find('a')
+    .on('click', function(e){
       e.preventDefault();
       e.stopPropagation();
       self.hide();
@@ -160,7 +166,8 @@ Menu.prototype.add = function(text, fn){
       fn && fn();
     });
 
-  this.items[slug] = el;
+  this.el.appendChild(el.get(0));
+  this.items[slug] = el.get(0);
   return this;
 };
 
@@ -176,7 +183,7 @@ Menu.prototype.remove = function(slug){
   var item = this.items[slug] || this.items[createSlug(slug)];
   if (!item) throw new Error('no menu item named "' + slug + '"');
   this.emit('remove', slug);
-  item.remove();
+  this.el.removeChild(item);
   delete this.items[slug];
   delete this.items[createSlug(slug)];
   return this;
@@ -204,10 +211,7 @@ Menu.prototype.has = function(slug){
  */
 
 Menu.prototype.moveTo = function(x, y){
-  this.el.css({
-    top: y,
-    left: x
-  });
+  this.menu.css('top', y).css('left',x);
   return this;
 };
 
@@ -220,7 +224,7 @@ Menu.prototype.moveTo = function(x, y){
 
 Menu.prototype.show = function(){
   this.emit('show');
-  this.el.show();
+  this.menu.css('display','block');
   return this;
 };
 
@@ -233,7 +237,7 @@ Menu.prototype.show = function(){
 
 Menu.prototype.hide = function(){
   this.emit('hide');
-  this.el.hide();
+  this.menu.css('display','none');
   return this;
 };
 
@@ -251,3 +255,5 @@ function createSlug(str) {
     .replace(/ +/g, '-')
     .replace(/[^a-z0-9-]/g, '');
 }
+
+

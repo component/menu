@@ -8,7 +8,7 @@
   ],
   "dependencies": {
     "component/emitter": "*",
-    "component/jquery": "*"
+    "component/dom": "*"
   },
   "styles": [
     "menu.css"
