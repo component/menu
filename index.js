@@ -31,7 +31,7 @@ function Menu() {
   Emitter.call(this);
   this.items = {};
   this.menu = dom('<ul class=menu>').css('display','none');
-  this.el = this.menu.get(0);
+  this.el = this.menu[0];
   document.body.appendChild(this.el);
   this.menu.on('hover', this.deselect.bind(this));
   document.getElementsByTagName('html')[0].onclick = this.hide.bind(this);
@@ -91,7 +91,7 @@ Menu.prototype.onkeydown = function(e){
       break;
     // up
     case 38:
-      e.preventDefault(); 
+      e.preventDefault();
       e.stopImmediatePropagation();
       this.move('previous');
       break;
@@ -115,14 +115,14 @@ Menu.prototype.move = function(direction){
   var prev = this.menu.find('.selected');
 
   var next = prev.length()
-    ? prev.get(0)[direction + 'ElementSibling']
-    : this.menu.find('li:first-child').get(0);
+    ? prev[0][direction + 'ElementSibling']
+    : this.menu.find('li:first-child')[0];
 
   next = next ? dom(next) : dom([]);
   if (next.length()) {
     prev.removeClass('selected');
     next.addClass('selected');
-    next.find('a').get(0).focus();
+    next.find('a')[0].focus();
   }
 };
 
@@ -166,8 +166,8 @@ Menu.prototype.add = function(text, fn){
       fn && fn();
     });
 
-  this.el.appendChild(el.get(0));
-  this.items[slug] = el.get(0);
+  this.el.appendChild(el[0]);
+  this.items[slug] = el[0];
   return this;
 };
 
@@ -255,5 +255,3 @@ function createSlug(str) {
     .replace(/ +/g, '-')
     .replace(/[^a-z0-9-]/g, '');
 }
-
-
