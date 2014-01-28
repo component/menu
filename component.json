@@ -8,8 +8,12 @@
   ],
   "dependencies": {
     "component/bind": "*",
+    "component/dom": "*",
     "component/emitter": "*",
-    "component/dom": "*"
+    "stephenmathieson/normalize": "*"
+  },
+  "development": {
+    "yields/prevent": "*"
   },
   "styles": [
     "menu.css"

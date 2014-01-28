@@ -3,9 +3,10 @@
  * Module dependencies.
  */
 
-var bind    = require('bind')
-  , Emitter = require('emitter')
-  , dom     = require('dom')
+var bind      = require('bind')
+  , Emitter   = require('emitter')
+  , dom       = require('dom')
+  , normalize = require('normalize')
 
 /**
  * Expose `Menu`.
@@ -158,14 +159,14 @@ Menu.prototype.add = function(text, fn){
              .addClass('menu-item-' + slug)
 
   el.find('a')
-    .on('click', function(e){
+    .on('click', normalize(function(e){
       e.preventDefault();
       e.stopPropagation();
       self.hide();
       self.emit('select', slug);
       self.emit(slug);
       fn && fn();
-    });
+    }));
 
   this.el.appendChild(el[0]);
   this.items[slug] = el[0];
@@ -226,7 +227,8 @@ Menu.prototype.has = function(slug){
  */
 
 Menu.prototype.moveTo = function(x, y){
-  this.menu.css('top', y).css('left',x);
+  this.menu.css('top', y);
+  this.menu.css('left', x);
   return this;
 };
 

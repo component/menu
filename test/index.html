@@ -11,6 +11,8 @@
     <script>
       var menu = require('menu');
       var bind = require('bind');
+      var normalize = require('normalize');
+      var prevent = require('prevent');
 
       menu = menu();
 
@@ -37,11 +39,11 @@
         menu.add('born-again', '<em>Born Again</em>');
       });
 
-      oncontextmenu = function(e){
-        e.preventDefault();
-        menu.moveTo(e.pageX, e.pageY);
+      document.oncontextmenu = normalize(function(e) {
+        prevent(e);
+        menu.moveTo(e.clientX, e.clientY);
         menu.show();
-      };
+      });
     </script>
   </body>
 </html>
