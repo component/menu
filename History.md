@@ -1,4 +1,11 @@
 
+0.1.2 / 2014-03-04 
+==================
+
+  * cmp: bump component/dom@0.1.4
+  * add repository field to readme
+  * added #menu.clear()
+
 0.1.1 / 2012-10-19 
 ==================
 
