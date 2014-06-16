@@ -114,12 +114,12 @@ Menu.prototype.onkeydown = function(e){
 Menu.prototype.move = function(direction){
   var prev = this.menu.find('.selected');
 
-  var next = prev.length()
+  var next = prev.length
     ? prev[0][direction + 'ElementSibling']
     : this.menu.find('li:first-child')[0];
 
   next = next ? dom(next) : dom([]);
-  if (next.length()) {
+  if (next.length) {
     prev.removeClass('selected');
     next.addClass('selected');
     next.find('a')[0].focus();
