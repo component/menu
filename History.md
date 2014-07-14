@@ -1,3 +1,9 @@
+
+1.0.0 / 2014-07-14
+==================
+
+ * Use low-level components instead of "component/dom" (#15, @TooTallNate)
+
 0.1.3 / 2014-06-16
 ==================
 

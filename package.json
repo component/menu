@@ -1,11 +1,14 @@
 {
   "name": "component-menu",
   "description": "Menu component",
-  "version": "0.1.3",
+  "version": "1.0.0",
   "keywords": [
     "browser",
     "menu",
     "ui"
+  ],
+  "contributors": [
+    "Nathan Rajlich <nathan@tootallnate.net> (http://n8.io)"
   ],
   "dependencies": {
     "component-classes": "1.2.1",
