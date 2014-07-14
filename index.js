@@ -126,13 +126,13 @@ Menu.prototype.onkeydown = function(e){
 Menu.prototype.move = function(direction){
   var prev = query.all('.selected', this.el);
 
-  var next = prev.length
+  var next = prev.length > 0
     ? prev[0][direction + 'ElementSibling']
     : query('li:first-child', this.el);
 
   if (next) {
-    if (prev) {
-      classes(prev).remove('selected');
+    for (var i = 0; i < prev.length; i++) {
+      classes(prev[i]).remove('selected');
     }
     classes(next).add('selected');
     var a = query('a', next);
