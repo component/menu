@@ -3,8 +3,12 @@
  * Module dependencies.
  */
 
-var Emitter = require('emitter')
-  , dom     = require('dom')
+var classes = require('classes');
+var domify = require('domify');
+var Emitter = require('emitter');
+var empty = require('empty');
+var event = require('event');
+var query = require('query');
 
 /**
  * Expose `Menu`.
@@ -27,23 +31,27 @@ module.exports = Menu;
  */
 
 function Menu() {
-  if (!(this instanceof Menu)) return new Menu;
-  Emitter.call(this);
+  if (!(this instanceof Menu)) return new Menu();
+
   this.items = {};
-  this.menu = dom('<ul class=menu>').css('display','none');
-  this.el = this.menu[0];
+  this.el = domify('<ul class="menu" style="display: none;"></ul>');
+
+  event.bind(this.el, 'hover', this.deselect.bind(this));
+
   document.body.appendChild(this.el);
-  this.menu.on('hover', this.deselect.bind(this));
-  document.getElementsByTagName('html')[0].onclick = this.hide.bind(this);
+
+  this.onkeydown = this.onkeydown.bind(this);
+  event.bind(document.documentElement, 'click', this.hide.bind(this));
+
   this.on('show', this.bindKeyboardEvents.bind(this));
   this.on('hide', this.unbindKeyboardEvents.bind(this));
 }
 
 /**
- * Inherit from `Emitter.prototype`.
+ * Mixin `Emitter`.
  */
 
-Menu.prototype = new Emitter;
+Emitter(Menu.prototype);
 
 /**
  * Deselect selected menu items.
@@ -52,7 +60,11 @@ Menu.prototype = new Emitter;
  */
 
 Menu.prototype.deselect = function(){
-  this.menu.find('.selected').removeClass('selected');
+  var selected = query.all('.selected', this.el);
+  for (var i = 0; i < selected.length; i++) {
+    classes(selected[i]).remove('selected');
+  }
+  return this;
 };
 
 /**
@@ -62,7 +74,7 @@ Menu.prototype.deselect = function(){
  */
 
 Menu.prototype.bindKeyboardEvents = function(){
-  dom(document).on('keydown', this._fnKeyDown = this.onkeydown.bind(this));
+  event.bind(document.documentElement, 'keydown', this.onkeydown);
   return this;
 };
 
@@ -73,7 +85,7 @@ Menu.prototype.bindKeyboardEvents = function(){
  */
 
 Menu.prototype.unbindKeyboardEvents = function(){
-  if (this._fnKeyDown) dom(document).off('keydown', this._fnKeyDown);
+  event.unbind(document.documentElement, 'keydown', this.onkeydown);
   return this;
 };
 
@@ -112,17 +124,19 @@ Menu.prototype.onkeydown = function(e){
  */
 
 Menu.prototype.move = function(direction){
-  var prev = this.menu.find('.selected');
+  var prev = query.all('.selected', this.el);
 
-  var next = prev.length
+  var next = prev.length > 0
     ? prev[0][direction + 'ElementSibling']
-    : this.menu.find('li:first-child')[0];
+    : query('li:first-child', this.el);
 
-  next = next ? dom(next) : dom([]);
-  if (next.length) {
-    prev.removeClass('selected');
-    next.addClass('selected');
-    next.find('a')[0].focus();
+  if (next) {
+    for (var i = 0; i < prev.length; i++) {
+      classes(prev[i]).remove('selected');
+    }
+    classes(next).add('selected');
+    var a = query('a', next);
+    if (a) a.focus();
   }
 };
 
@@ -152,22 +166,27 @@ Menu.prototype.add = function(text, fn){
     slug = createSlug(text);
   }
 
-  var self = this
-    , el = dom('<li><a href="#">' + text + '</a></li>')
-             .addClass('menu-item-' + slug)
+  var self = this;
+  var el = domify('<li class="menu-item-' + slug + '">' +
+                    '<a href="#">' + text + '</a>' +
+                  '</li>');
 
-  el.find('a')
-    .on('click', function(e){
-      e.preventDefault();
-      e.stopPropagation();
-      self.hide();
-      self.emit('select', slug);
-      self.emit(slug);
-      fn && fn();
-    });
+  var links = query.all('a', el);
+  for (var i = 0; i < links.length; i++) {
+    event.bind(links[i], 'click', onclick);
+  }
 
-  this.el.appendChild(el[0]);
-  this.items[slug] = el[0];
+  function onclick(e){
+    e.preventDefault();
+    e.stopPropagation();
+    self.hide();
+    self.emit('select', slug);
+    self.emit(slug);
+    fn && fn();
+  }
+
+  this.el.appendChild(el);
+  this.items[slug] = el;
   return this;
 };
 
@@ -197,7 +216,7 @@ Menu.prototype.remove = function(slug){
  */
 
 Menu.prototype.clear = function(){
-  this.el.innerHTML = "";
+  empty(this.el);
   this.items = {};
   this.emit('clear');
   return this;
@@ -225,7 +244,8 @@ Menu.prototype.has = function(slug){
  */
 
 Menu.prototype.moveTo = function(x, y){
-  this.menu.css('top', y).css('left',x);
+  this.el.style.top = y;
+  this.el.style.left = x;
   return this;
 };
 
@@ -237,8 +257,8 @@ Menu.prototype.moveTo = function(x, y){
  */
 
 Menu.prototype.show = function(){
+  this.el.style.display = 'block';
   this.emit('show');
-  this.menu.css('display','block');
   return this;
 };
 
@@ -250,8 +270,8 @@ Menu.prototype.show = function(){
  */
 
 Menu.prototype.hide = function(){
+  this.el.style.display = 'none';
   this.emit('hide');
-  this.menu.css('display','none');
   return this;
 };
 

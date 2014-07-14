@@ -1,14 +1,19 @@
 {
-  "name": "menu-component",
+  "name": "component-menu",
   "description": "Menu component",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "keywords": [
+    "browser",
     "menu",
     "ui"
   ],
   "dependencies": {
-    "emitter-component": "*",
-    "jquery-component": "*"
+    "component-classes": "1.2.1",
+    "domify": "1.3.0",
+    "component-emitter": "1.1.3",
+    "component-empty": "0.0.1",
+    "component-event": "0.1.4",
+    "component-query": "0.0.3"
   },
   "component": {
     "styles": [
@@ -18,8 +23,16 @@
       "menu/index.js": "index.js"
     }
   },
+  "browser": {
+    "classes": "component-classes",
+    "emitter": "component-emitter",
+    "empty": "component-empty",
+    "event": "component-event",
+    "query": "component-query"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/component/menu.git"
-  }
+  },
+  "license": "MIT"
 }
